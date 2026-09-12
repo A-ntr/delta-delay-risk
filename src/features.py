@@ -60,6 +60,7 @@ def expanding_group_rate(
     Returns a new DataFrame with the two new columns added (don't mutate df).
     """
     raise NotImplementedError("Your turn — implement using the hints above.")
+    
 
 
 def add_historical_delay_features(
