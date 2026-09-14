@@ -59,7 +59,14 @@ def expanding_group_rate(
 
     Returns a new DataFrame with the two new columns added (don't mutate df).
     """
-    raise NotImplementedError("Your turn — implement using the hints above.")
+    out = df.copy()
+    out.sort_values(by=date_col, inplace=True)
+    
+    out[f"{'_'.join(group_cols)}_hist_rate"] = out.groupby(group_cols)[target_col].transform(lambda s: s.shift(1).expanding().mean())
+    out[f"{'_'.join(group_cols)}_hist_count"] = out.groupby(group_cols)[target_col].transform(lambda s: s.shift(1).expanding().count())
+    
+    return out
+    # raise NotImplementedError("Your turn — implement using the hints above.")
     
 
 
