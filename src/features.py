@@ -7,7 +7,11 @@ import numpy as np
 
 
 def add_calendar_features(df: pd.DataFrame, date_col: str = "FlightDate") -> pd.DataFrame:
-    """Fully implemented example — night-before-knowable calendar features."""
+    """
+    @func: Adds calendar features to the DataFrame.
+    @param df: The input DataFrame containing the data.
+    @param date_col: Column name for the date values.
+    @return: DataFrame with new columns for month, day of week, is weekend,"""
     out = df.copy()
     out["month"] = out[date_col].dt.month
     out["day_of_week"] = out[date_col].dt.dayofweek  # 0=Mon
@@ -37,11 +41,10 @@ def expanding_group_rate(
     
     out[f"{'_'.join(group_cols)}_hist_rate"] = out.groupby(group_cols)[target_col].transform(lambda s: s.shift(1).expanding().mean())
     out[f"{'_'.join(group_cols)}_hist_count"] = out.groupby(group_cols)[target_col].transform(lambda s: s.shift(1).expanding().count())
-    
-    return out
-    # raise NotImplementedError("Your turn — implement using the hints above.")
-    
 
+    out = out.sort_index()  # Restore original order
+    return out
+    
 
 def add_historical_delay_features(
     df: pd.DataFrame,
@@ -67,10 +70,7 @@ def add_historical_delay_features(
       # Changing out["CRSDepTime"] to time object
       out["CRSDepTime"] = pd.to_datetime(out["CRSDepTime"], format="%H%M").dt.time
       # Categorizing time_of_day to morning or evening by using a categorizing function and df.apply(func)
-      # df["time_of_day"] = df["time_obj"].apply(get_time_of_day)
-
       out["time_of_day"] = out["CRSDepTime"].apply(lambda time: "morning" if time.hour < 12 else "evening")
-      # out["time_of_day"] = np.where(out["CRSDepTime"].hour >= 12, "evening", "morning") #evening if after (>=) 12pm
     # Generating rate and frequency for each feature
       # Tail_Number
     out = expanding_group_rate(out, ["Tail_Number"], date_col, target_col)
