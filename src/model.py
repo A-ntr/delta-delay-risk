@@ -82,9 +82,10 @@ def train_model_with_early_stopping(
     model.fit(
         X_train, y_train, 
         eval_set=[(X_eval, y_eval)], 
-        early_stopping_rounds=10, 
+        early_stopping_rounds=20, 
         verbose=50
     )
+    
     return model
 
 def train_baseline_model(X_train: pd.DataFrame, y_train: pd.Series) -> XGBClassifier:
@@ -111,7 +112,31 @@ def best_fbeta_threshold(
     Sweep candidate decision thresholds and return the one that maximizes
     the F-beta score — recall weighted `beta` times as important as precision
     (missing a real delay costs more than a false alarm, so beta=2 by default).
-
-    Return a dict with keys: "threshold", "f_beta", "precision", "recall".
+    @param y_true: The true binary labels.
+    @param y_proba: The predicted probabilities for the positive class.
+    @param beta: The beta value for the F-beta score (default is 2.0).
+    @return: A dict with keys: "threshold", "f_beta", "precision", "recall".
     """
-    
+    # Computing precision-recall pairs for different thresholds
+    precisions, recalls, thresholds = precision_recall_curve(y_true, y_proba)
+
+    # Dropping the last precision-recall pair to match the number of thresholds
+    precisions = precisions[:-1]
+    recalls = recalls[:-1]
+
+    # Calculating the F-beta score for each threshold
+    f_beta_scores = ((1 + beta**2) * (precisions * recalls)) / ((beta**2 * precisions) + recalls + 1e-10) # Avoid division by zero by adding tiny epsilon
+
+    # Locating maximum f-beta score, threshold, corresponding precision, and recall
+    best_idx = np.argmax(f_beta_scores)
+    best_threshold = thresholds[best_idx]
+    best_f_beta = f_beta_scores[best_idx]
+    best_precision = precisions[best_idx]
+    best_recall = recalls[best_idx]
+
+    return {
+        "threshold": best_threshold,
+        "f_beta": best_f_beta,
+        "precision": best_precision,
+        "recall": best_recall
+    }

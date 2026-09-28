@@ -63,7 +63,7 @@ def add_historical_delay_features(
     # output df is copy of df to avoid mutating original df
     out = df.copy()
     # Adding delay column for flights delayed over 15 minutes
-    if "ArrDelayMinutes" in out.columns:
+    if "ArrDelayMinutes" in out.columns and "delayed" not in out.columns:
       out["delayed"] = (out["ArrDelayMinutes"] >= 15).astype(int)
     # Adding time of day feature based on scheduled departure time
     if "CRSDepTime" in out.columns:
