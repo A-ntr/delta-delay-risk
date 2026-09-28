@@ -1,0 +1,13 @@
+README.md
+pyproject.toml
+src/__init__.py
+src/features.py
+src/make_sample_data.py
+src/model.py
+src/train.py
+src/my_project.egg-info/PKG-INFO
+src/my_project.egg-info/SOURCES.txt
+src/my_project.egg-info/dependency_links.txt
+src/my_project.egg-info/top_level.txt
+tests/test_features.py
+tests/test_model.py

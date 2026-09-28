@@ -82,7 +82,6 @@ def train_model_with_early_stopping(
     model.fit(
         X_train, y_train, 
         eval_set=[(X_eval, y_eval)], 
-        early_stopping_rounds=20, 
         verbose=50
     )
     

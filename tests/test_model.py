@@ -10,7 +10,7 @@ catch it because the two expected thresholds are genuinely different.
 import numpy as np
 import pandas as pd
 import pytest
-from src.model import chronological_split, best_fbeta_threshold
+from model import chronological_split, best_fbeta_threshold
 
 
 class TestChronologicalSplit:

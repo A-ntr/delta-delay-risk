@@ -9,7 +9,7 @@ than guessing.
 """
 import pandas as pd
 import pytest
-from src.features import expanding_group_rate, add_historical_delay_features
+from features import expanding_group_rate, add_historical_delay_features
 
 
 @pytest.fixture
